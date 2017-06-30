@@ -4,12 +4,16 @@ import ScoreTeam from './ScoreTeam'
 import RaisedButton from 'material-ui/RaisedButton';
 import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import firebase from 'firebase'
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
 
 export default class ScoreAdmin extends Component{
   constructor(props){
     super(props)
     this.state = {
+      open: false,
       teamcount : 0,
+      teamName : "",
       teams : []
     }
     this.dataRef = null
@@ -32,6 +36,18 @@ export default class ScoreAdmin extends Component{
     })
   }
 
+  handleChange(event, newValue){
+    this.setState({teamName: newValue})
+  }
+
+  handleOpen(){
+    this.setState({open: true})
+  }
+
+  handleClose(){
+    this.setState({open: false})
+  }
+
   renderTeam(team){
     return <ScoreTeam key={team.name} team={team}/>
   }
@@ -44,15 +60,20 @@ export default class ScoreAdmin extends Component{
   handleAddTeam(){
     let teamId = 'team'+this.state.teamcount;
     firebase.database().ref('teams/'+teamId).set({
-      name: 'Equipe ' + this.state.teamcount,
+      name: this.state.teamName,
       score: 0,
       histScore: [],
       teamId: teamId
     })
     this.addTeam()
+    this.handleClose()
   }
 
   render(){
+    const actions = [
+      <RaisedButton label='Adicionar'
+        onTouchTap={this.handleAddTeam.bind(this)}/>
+      ]
     return (
       <div className='team-container'>
         {this.state.teams.map(this.renderTeam.bind(this))}
@@ -62,10 +83,18 @@ export default class ScoreAdmin extends Component{
             <RaisedButton
               backgroundColor={"#BDBDBD"}
               icon={<ContentAddCircle/>}
-              onTouchTap={() => this.handleAddTeam()}
+              onTouchTap={() => this.handleOpen()}
             />
           </CardActions>
         </Card>
+        <Dialog
+          title={'Adicionar Equipe'}
+          actions={actions}
+          model={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose.bind(this)}>
+          <TextField hintText="Nome da Equipe" onChange={this.handleChange.bind(this)}/>
+        </Dialog>
       </div>
 
     )
