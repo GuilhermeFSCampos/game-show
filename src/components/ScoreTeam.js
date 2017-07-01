@@ -17,6 +17,14 @@ export default class ScoreTeam extends Component{
     this.scoreRef = null
     this.histScoreRef = null
   }
+  componentWillUnmount(){
+    if(this.scoreRef){
+      this.scoreRef.off();
+    }
+    if(this.histScoreRef){
+      this.histScoreRef.off();
+    }
+  }
 
   componentDidMount(){
     this.scoreRef = firebase.database().ref('teams/'+this.props.team.teamId+'/score');
@@ -75,16 +83,19 @@ export default class ScoreTeam extends Component{
         backgroundColor="#B71C1C"
         onTouchTap={this.handleSubtractScore.bind(this)}/>
     ]
+    const dialogStyle = {
+      background: this.props.team.color
+    }
     return (
       <div>
-      <Card className='score-team'>
+      <Card className='score-team' style={{background: this.props.team.color}}>
         <CardText>{this.props.team.name}</CardText>
         <CardText>{this.props.team.score}</CardText>
         <CardActions>
           <RaisedButton label="Pontos" onTouchTap={this.handleOpen.bind(this)}/>
         </CardActions>
       </Card>
-      <Dialog
+      <Dialog paperProps={{style: dialogStyle}}
         title={'Alterar pontuação - '+this.props.team.name}
         actions={actions}
         model={false}
