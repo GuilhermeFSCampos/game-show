@@ -16,6 +16,7 @@ export default class ScoreTeam extends Component{
     }
     this.scoreRef = null
     this.histScoreRef = null
+    this.lastestPointRef = null
   }
   componentWillUnmount(){
     if(this.scoreRef){
@@ -24,11 +25,16 @@ export default class ScoreTeam extends Component{
     if(this.histScoreRef){
       this.histScoreRef.off();
     }
+    if(this.lastestPointRef){
+      this.lastestPointRef.off();
+    }
   }
 
   componentDidMount(){
-    this.scoreRef = firebase.database().ref('teams/'+this.props.team.teamId+'/score');
-    this.histScoreRef = firebase.database().ref('teams/'+this.props.team.teamId+'/histScore');
+    let teamId = this.props.team.teamId
+    this.scoreRef = firebase.database().ref('teams/'+teamId+'/score');
+    this.histScoreRef = firebase.database().ref('teams/'+teamId+'/histScore');
+    this.lastestPointRef = firebase.database().ref('latestPoint/')
   }
 
   handleOpen(){
@@ -50,38 +56,35 @@ export default class ScoreTeam extends Component{
     }
     let newHistKey = this.histScoreRef.push().key
     this.histScoreRef.child(newHistKey).set(change)
+    this.lastestPointRef.set({
+      point: change,
+      color: this.props.team.color
+    })
   }
 
-  addScore(){
-    let currentScore = parseInt(this.props.team.score) + parseInt(this.state.deltaScore)
-    this.scoreRef.set(currentScore)
-    this.addHist(true)
+  changeScore(isAdd){
+    let newScore = 0
+    if(isAdd){
+      newScore = parseInt(this.props.team.score) + parseInt(this.state.deltaScore)
+    }else{
+      newScore = parseInt(this.props.team.score) - parseInt(this.state.deltaScore)
+    }
+    this.scoreRef.set(newScore)
+    this.addHist(isAdd)
   }
 
-  subtractScore(){
-    let currentScore = parseInt(this.props.team.score) - parseInt(this.state.deltaScore)
-    this.scoreRef.set(currentScore)
-    this.addHist(false)
-  }
-
-  handleAddScore(){
-    this.addScore()
+  handleScoreChange(isAdd){
+    this.changeScore(isAdd)
     this.handleClose()
   }
-
-  handleSubtractScore(){
-    this.subtractScore()
-    this.handleClose()
-  }
-
 
   render(){
     const actions = [
       <RaisedButton label='Adicionar'
-        onTouchTap={this.handleAddScore.bind(this)}/>,
+        onTouchTap={() => this.handleScoreChange(true)}/>,
       <RaisedButton label='Remover'
         backgroundColor="#B71C1C"
-        onTouchTap={this.handleSubtractScore.bind(this)}/>
+        onTouchTap={() => this.handleScoreChange(false)}/>
     ]
     const dialogStyle = {
       background: this.props.team.color
