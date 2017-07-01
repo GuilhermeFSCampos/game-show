@@ -16,7 +16,7 @@ export default class ScoreTeam extends Component{
     }
     this.scoreRef = null
     this.histScoreRef = null
-    this.lastestPointRef = null
+    this.latestPointRef = null
   }
   componentWillUnmount(){
     if(this.scoreRef){
@@ -25,8 +25,8 @@ export default class ScoreTeam extends Component{
     if(this.histScoreRef){
       this.histScoreRef.off();
     }
-    if(this.lastestPointRef){
-      this.lastestPointRef.off();
+    if(this.latestPointRef){
+      this.latestPointRef.off();
     }
   }
 
@@ -34,7 +34,7 @@ export default class ScoreTeam extends Component{
     let teamId = this.props.team.teamId
     this.scoreRef = firebase.database().ref('teams/'+teamId+'/score');
     this.histScoreRef = firebase.database().ref('teams/'+teamId+'/histScore');
-    this.lastestPointRef = firebase.database().ref('latestPoint/')
+    this.latestPointRef = firebase.database().ref('latestPoint/')
   }
 
   handleOpen(){
@@ -56,7 +56,7 @@ export default class ScoreTeam extends Component{
     }
     let newHistKey = this.histScoreRef.push().key
     this.histScoreRef.child(newHistKey).set(change)
-    this.lastestPointRef.set({
+    this.latestPointRef.set({
       point: change,
       color: this.props.team.color
     })

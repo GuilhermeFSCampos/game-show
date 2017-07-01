@@ -4,20 +4,27 @@ import {BarChart, Bar, CartesianGrid,
   ResponsiveContainer} from 'recharts'
 import firebase from 'firebase'
 import './ScoreGraph.css'
+import ShowScore from './ShowScore'
 
 export default class ScoreGraph extends Component{
 
   constructor(props){
     super(props)
     this.state = {
+      open: false,
+      latestPoint: {},
       teams: []
     }
     this.teamsRef = null
+    this.latestPointRef = null
   }
 
   componentWillUnmount(){
     if(this.teamsRef){
       this.teamsRef.off()
+    }
+    if(this.latestPointRef){
+      this.latestPointRef.off()
     }
   }
 
@@ -31,7 +38,21 @@ export default class ScoreGraph extends Component{
         this.setState({teams: []})
       }
     })
+
+    this.latestPointRef = firebase.database().ref('latestPoint/').on('value', (snapshot) => {
+      let latestPoint = snapshot.val()
+      if(latestPoint){
+        this.setState({
+          open: true,
+          latestPoint: latestPoint
+        })
+        setTimeout(()=>{
+          this.setState({open:false})
+        },this.props.delay)
+      }
+    })
   }
+
 
   render(){
     if (this.state.teams) {
@@ -57,6 +78,7 @@ export default class ScoreGraph extends Component{
               </Bar>
             </BarChart>
           </ResponsiveContainer>
+          <ShowScore open={this.state.open} latestPoint={this.state.latestPoint} />
         </div>
       )
     }
@@ -65,3 +87,6 @@ export default class ScoreGraph extends Component{
     )
   }
 }
+ ScoreGraph.defaultProps = {
+   delay: 2500
+ }
