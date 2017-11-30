@@ -58,7 +58,8 @@ export default class ScoreTeam extends Component{
     this.histScoreRef.child(newHistKey).set(change)
     this.latestPointRef.set({
       point: change,
-      color: this.props.team.color
+      color: this.props.team.color,
+      name : this.props.team.name
     })
   }
 

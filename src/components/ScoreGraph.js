@@ -55,7 +55,7 @@ export default class ScoreGraph extends Component{
 
 
   render(){
-    if (this.state.teams) {;
+    if (this.state.teams) {
       return(
         <div className="graph-container">
           <ResponsiveContainer width="80%" height="80%" minHeight={760}>

@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import './ShowScore.css'
 
 export default class ShowScore extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render(){
     return this.props.open ? <Modal latestPoint={this.props.latestPoint}/> : <span />
@@ -21,14 +18,17 @@ const Modal = (props) => {
     color: props.latestPoint.color,
     fontWeight: "bold",
     stroke: "#fff",
-    fontSize: 600
+    fontSize: 300
   }
 
   let point = props.latestPoint.point
+  let name = props.latestPoint.name
 
   if(point > 0){
     point = '+' + point
   }
+
+  point = name + ': ' + point
 
   return (
     <div className="show-score-backdrop">
