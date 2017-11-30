@@ -55,7 +55,7 @@ export default class ScoreGraph extends Component{
 
 
   render(){
-    if (this.state.teams) {
+    if (this.state.teams) {;
       return(
         <div className="graph-container">
           <ResponsiveContainer width="80%" height="80%" minHeight={760}>
@@ -71,7 +71,7 @@ export default class ScoreGraph extends Component{
               <ReferenceLine x={0} stroke='#000'/>
               <Bar dataKey="score" label={{fill:"black",fontSize:60, stroke:"#fff", fontWeight: "bold"}}>
                 {
-                  this.state.teams.map((entry, index) => (
+                  this.state.teams.sort((a, b) => b.score - a.score).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))
                 }
