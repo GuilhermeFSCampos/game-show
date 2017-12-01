@@ -3,6 +3,7 @@ import {Card, CardActions, CardText} from 'material-ui/Card';
 import './ScoreTeam.css'
 import firebase from 'firebase'
 import RaisedButton from 'material-ui/RaisedButton';
+import ActionDeleteForever from 'material-ui/svg-icons/action/delete-forever';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 
@@ -17,6 +18,7 @@ export default class ScoreTeam extends Component{
     this.scoreRef = null
     this.histScoreRef = null
     this.latestPointRef = null
+    this.teamRef = null
   }
   componentWillUnmount(){
     if(this.scoreRef){
@@ -28,6 +30,9 @@ export default class ScoreTeam extends Component{
     if(this.latestPointRef){
       this.latestPointRef.off();
     }
+    if(this.teamRef){
+      this.teamRef.off();
+    }
   }
 
   componentDidMount(){
@@ -35,6 +40,11 @@ export default class ScoreTeam extends Component{
     this.scoreRef = firebase.database().ref('teams/'+teamId+'/score');
     this.histScoreRef = firebase.database().ref('teams/'+teamId+'/histScore');
     this.latestPointRef = firebase.database().ref('latestPoint/')
+    this.teamRef = firebase.database().ref('teams/'+teamId);
+  }
+
+  handleDeleteTeam(){
+    this.teamRef.remove()
   }
 
   handleOpen(){
@@ -97,6 +107,11 @@ export default class ScoreTeam extends Component{
         <CardText>{this.props.team.score}</CardText>
         <CardActions>
           <RaisedButton label="Pontos" onTouchTap={this.handleOpen.bind(this)}/>
+          <RaisedButton
+            icon={<ActionDeleteForever color='#fff'/>}
+            backgroundColor="#B71C1C"
+            onTouchTap={this.handleDeleteTeam.bind(this)}
+          />
         </CardActions>
       </Card>
       <Dialog paperProps={{style: dialogStyle}}
