@@ -89,6 +89,10 @@ export default class ScoreTeam extends Component{
     this.handleClose()
   }
 
+  handleReset(){
+    this.scoreRef.set(0)
+  }
+
   render(){
     const actions = [
       <RaisedButton label='Adicionar'
@@ -107,6 +111,7 @@ export default class ScoreTeam extends Component{
         <CardText>{this.props.team.score}</CardText>
         <CardActions>
           <RaisedButton label="Pontos" onTouchTap={this.handleOpen.bind(this)}/>
+          <RaisedButton label="Reset" onTouchTap={this.handleReset.bind(this)}/>
           <RaisedButton
             icon={<ActionDeleteForever color='#fff'/>}
             backgroundColor="#B71C1C"
