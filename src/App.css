@@ -7,10 +7,14 @@
   height: 80px;
 }
 
+.App-logo2 {
+  height: 95px;
+}
+
 .App-header {
-  background-color: #222;
-  height: 60px;
-  padding: 20px;
+  --background-color: #222;
+  height: 95px;
+  padding: 5px;
   color: white;
 }
 
