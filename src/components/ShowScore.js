@@ -18,7 +18,7 @@ const Modal = (props) => {
     color: props.latestPoint.color,
     fontWeight: "bold",
     stroke: "#fff",
-    fontSize: 300
+    fontSize: 350
   }
 
   let point = props.latestPoint.point
@@ -28,12 +28,12 @@ const Modal = (props) => {
     point = '+' + point
   }
 
-  point = name + ': ' + point
-
   return (
     <div className="show-score-backdrop">
       <text className="show-score-stroke" style={spanStyle}>
-        {point}
+        <span>{name}</span>
+        <br></br>
+        <span>{point}</span>
       </text>
     </div>
   )
