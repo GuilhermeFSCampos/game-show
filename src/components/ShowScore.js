@@ -28,11 +28,22 @@ const Modal = (props) => {
     point = '+' + point
   }
 
+  let fontSize = 350
+
+  if(name){
+    let characters = name.length
+    if (characters <= 9) {
+      fontSize = 350
+    }else {
+      fontSize = 350 - characters * 11
+    }
+  }
+
   return (
     <div className="show-score-backdrop">
       <text className="show-score-stroke" style={spanStyle}>
-        <span>{name}</span>
-        <br></br>
+        <span style={{fontSize}}>{name}</span>
+        <br/>
         <span>{point}</span>
       </text>
     </div>
