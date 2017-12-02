@@ -52,7 +52,7 @@ export default class Scoreboard extends Component{
   }
 
   renderTeam(team){
-    return <Team key={team.teamId} team={team}/>
+    return <Team key={team.teamId} team={team} teamCount={this.state.teams.length}/>
   }
 
   render(){
@@ -73,17 +73,37 @@ export default class Scoreboard extends Component{
 }
 
 const Team = (props) => {
-  const pStyle = {
+  let fontSize, width
+
+  if (props.teamCount < 5) {
+    fontSize = 190
+    width = "820px"
+  }else if (props.teamCount < 7) {
+    fontSize = 120
+    width = "500px"
+  }else {
+    fontSize = 100
+    width = "420px"
+  }
+
+
+  const teamStyle = {
     //color: team.color,
     fontWeight: "bold",
     stroke: "#fff",
-    fontSize: 100
+    fontSize: fontSize
+  }
+
+  const teamCardStyle = {
+    background: props.team.color,
+    width: width,
+    height: "420px"
   }
 
   return (
-    <Card className='score-team2' style={{background: props.team.color}}>
-      <CardText className='show-score-stroke2' style={pStyle}>{props.team.name}</CardText>
-      <CardText className='show-score-stroke2' style={pStyle}>{props.team.score}</CardText>
+    <Card className='score-team2' style={teamCardStyle}>
+      <CardText className='show-score-stroke2' style={teamStyle}>{props.team.name}</CardText>
+      <CardText className='show-score-stroke2' style={teamStyle}>{props.team.score}</CardText>
     </Card>
   )
 }
