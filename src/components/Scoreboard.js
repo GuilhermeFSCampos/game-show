@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import firebase from 'firebase'
 import ShowScore from './ShowScore'
 import './Scoreboard.css'
-import {Card, CardText} from 'material-ui/Card';
+import {Card, CardText} from 'material-ui/Card'
+import logo from '../logo.png';
 
 export default class Scoreboard extends Component{
 
@@ -56,7 +57,7 @@ export default class Scoreboard extends Component{
   }
 
   render(){
-    if (this.state.teams) {
+    if (this.state.teams && this.state.teams.length > 0) {
       return (
         <div className='team-container'>
           {this.state.teams.sort((a, b) => b.score - a.score).map(this.renderTeam.bind(this))}
@@ -66,7 +67,7 @@ export default class Scoreboard extends Component{
       )
     }
     return (
-      <p>oie</p>
+      <img src={logo} alt="logo" />
     )
   }
 
